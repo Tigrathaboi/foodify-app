@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import About from "./components/nav-pages/about";
+import Events from "./components/nav-pages/events";
+import AddRecipeModal from "./components/modal/AddRecipeModal";
+import './app.scss';
+
+const body = document.querySelector('body');
 
 function App() {
+  const [isModalShowed, setIsModalShowed] = useState(false);
+
+  const handleShowModal = () => {
+    // console.log(isModalShowed);
+    setIsModalShowed(true);
+    body.classList.add('stop-scrolling');
+  };
+
+  const handleDestroyModal = () => {
+    // console.log(isModalShowed);
+    setIsModalShowed(false);
+    body.classList.remove('stop-scrolling');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router >
+      <Navbar handleShowModal={handleShowModal}/>
+      <Routes>
+        <Route path="/" exact element={<About />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/AddRecipeModal" element={
+          isModalShowed &&
+        <AddRecipeModal handleDestroyModal={handleDestroyModal}/>
+        }/>
+      </Routes>
+    </Router>
   );
 }
 
